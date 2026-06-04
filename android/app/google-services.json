@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "273258368206",
+    "project_id": "utrideapp",
+    "storage_bucket": "utrideapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273258368206:android:b878d4e9aefdddabe8549f",
+        "android_client_info": {
+          "package_name": "com.example.utride_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa39vWsORa2aFN07jDUAMO_Mt94hvNX-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,46 @@
+name: utride_app
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_native_splash: ^2.4.7
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  firebase_ui_auth: ^3.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  image: assets/logo.png
+  branding: assets/branding.png
+  color: "#0A2E5C"
+
+  android_12:
+    image: assets/logo.png
+    branding: assets/branding.png
+    color: "#0A2E5C"
