@@ -245,47 +245,11 @@ class _MyLoginState extends State<MyLogin> {
                         ),
 
                         TextButton(
-                          onPressed: () async {
-                            if (emailController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Ingresa tu correo primero'),
-                                ),
-                              );
-                              return;
-                            }
-
-                            try {
-                              await FirebaseAuth.instance
-                                  .sendPasswordResetEmail(
-                                    email: emailController.text.trim(),
-                                  );
-
-                              if (!context.mounted) return;
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Correo de recuperación enviado',
-                                  ),
-                                ),
-                              );
-                            } on FirebaseAuthException catch (e) {
-                              if (!context.mounted) return;
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    e.message ?? 'Error al enviar correo',
-                                  ),
-                                ),
-                              );
-                            }
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/ocontracena');
                           },
-
                           child: const Text(
                             'Olvide mi contraseña',
-
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               fontSize: 18,

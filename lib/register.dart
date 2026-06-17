@@ -16,67 +16,67 @@ class _MyRegisterState extends State<MyRegister> {
   bool isLoading = false;
 
   Future<void> registerUser() async {
-  if (nameController.text.isEmpty ||
-      emailController.text.isEmpty ||
-      passwordController.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Completa todos los campos')),
-    );
-    return;
-  }
-
-  try {
-    setState(() {
-      isLoading = true;
-    });
-
-    UserCredential userCredential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
-        );
-
-    // Enviar correo de verificación
-    await userCredential.user?.sendEmailVerification();
-
-    if (!mounted) return;
-
-    setState(() {
-      isLoading = false;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Usuario registrado. Revisa tu correo para verificar tu cuenta.',
-        ),
-      ),
-    );
-
-    Navigator.pushReplacementNamed(context, '/login');
-  } on FirebaseAuthException catch (e) {
-    if (!mounted) return;
-
-    setState(() {
-      isLoading = false;
-    });
-
-    String message = '';
-
-    if (e.code == 'weak-password') {
-      message = 'La contraseña es muy débil';
-    } else if (e.code == 'email-already-in-use') {
-      message = 'El correo ya está registrado';
-    } else if (e.code == 'invalid-email') {
-      message = 'Correo inválido';
-    } else {
-      message = e.message ?? 'Error al registrar usuario';
+    if (nameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Completa todos los campos')),
+      );
+      return;
     }
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-  }
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
+
+      // Enviar correo de verificación
+      await userCredential.user?.sendEmailVerification();
+
+      if (!mounted) return;
+
+      setState(() {
+        isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Usuario registrado. Revisa tu correo para verificar tu cuenta.',
+          ),
+        ),
+      );
+
+      Navigator.pushReplacementNamed(context, '/login');
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        isLoading = false;
+      });
+
+      String message = '';
+
+      if (e.code == 'weak-password') {
+        message = 'La contraseña es muy débil';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'El correo ya está registrado';
+      } else if (e.code == 'invalid-email') {
+        message = 'Correo inválido';
+      } else {
+        message = e.message ?? 'Error al registrar usuario';
+      }
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    }
   }
 
   @override
@@ -238,7 +238,7 @@ class _MyRegisterState extends State<MyRegister> {
                             ),
                           ),
 
-                          const SizedBox(height: 40),
+                          const SizedBox(height: 45),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -265,28 +265,6 @@ class _MyRegisterState extends State<MyRegister> {
                                         onPressed: registerUser,
                                         icon: const Icon(Icons.arrow_forward),
                                       ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 50),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/login');
-                                },
-                                child: const Text(
-                                  'Iniciar Sesion',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                  ),
-                                ),
                               ),
                             ],
                           ),

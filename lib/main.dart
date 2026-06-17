@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:utride_app/perfil_usuario.dart';
+import 'package:utride_app/cambio_contrasena.dart';
+import 'package:utride_app/notificaciones.dart';
 import 'firebase_options.dart';
 
 import 'login.dart';
@@ -38,6 +40,10 @@ class UtrideApp extends StatelessWidget {
         '/home': (context) => const Homepage(),
 
         '/perfil_usuario': (context) => Perfil(),
+
+        '/ocontracena': (context) => RecuperarPasswordPage(),
+
+        '/notificaciones': (context) => Notificaciones(),
       },
     );
   }
