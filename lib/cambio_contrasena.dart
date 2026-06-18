@@ -74,8 +74,8 @@ class _RecuperarPasswordPageState extends State<RecuperarPasswordPage> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                Image.asset("assets/logo.png", width: 220),
-                const SizedBox(height: 20),
+                Image.asset("assets/logo.png", width: 250),
+                const SizedBox(height: 10),
                 const Text(
                   "Recuperar Contraseña",
                   style: TextStyle(

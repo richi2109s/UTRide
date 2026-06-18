@@ -171,7 +171,7 @@ class _NotificacionesState extends State<Notificaciones> {
                               notificacionesActivas = value;
                             });
                           },
-                          activeColor: Colors.white,
+                          activeThumbColor: Colors.white,
                           activeTrackColor: const Color.fromARGB(
                             255,
                             250,
@@ -259,7 +259,7 @@ class _NotificacionesState extends State<Notificaciones> {
                                 alertas[index].activa = value;
                               });
                             },
-                            activeColor: Colors.white,
+                            activeThumbColor: Colors.white,
                             activeTrackColor: const Color.fromARGB(
                               255,
                               250,
@@ -272,65 +272,10 @@ class _NotificacionesState extends State<Notificaciones> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),
-          ),
-
-          // ===== Barra inferior estilo Homepage =====
-          Positioned(
-            bottom: 1,
-            left: 1,
-            child: Container(
-              width: 600,
-              height: 50,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 15, 4, 50),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -1,
-            left: 20,
-            child: IconButton(
-              icon: const Icon(Icons.home, size: 40, color: Colors.white),
-              onPressed: () {
-                Navigator.pushNamed(context, "/home");
-              },
-            ),
-          ),
-          Positioned(
-            bottom: -1,
-            right: 175,
-            child: IconButton(
-              icon: const Icon(
-                Icons.directions_bus,
-                size: 40,
-                color: Colors.white,
-              ),
-              onPressed: () {},
-            ),
-          ),
-          Positioned(
-            bottom: -1,
-            right: 20,
-            child: IconButton(
-              icon: const Icon(
-                Icons.notifications,
-                size: 40,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pushNamed(context, "/notificaciones");
-              },
-            ),
-          ),
-          Positioned(
-            bottom: 45,
-            left: 10,
-            right: 10,
-            child: const Divider(color: Colors.white),
           ),
         ],
       ),

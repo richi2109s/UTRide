@@ -7,6 +7,8 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -43,7 +45,7 @@ class Homepage extends StatelessWidget {
               ),
             ),
 
-            // mapa
+            // MAPA
             Positioned(
               top: 110,
               left: 10,
@@ -53,7 +55,7 @@ class Homepage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: FlutterMap(
                   options: const MapOptions(
-                    initialCenter: LatLng(31.6538, -106.3705),
+                    initialCenter: LatLng(31.766367, -106.561674),
                     initialZoom: 15,
                   ),
                   children: [
@@ -62,23 +64,16 @@ class Homepage extends StatelessWidget {
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.utride.app',
                     ),
-
-                    MarkerLayer(
+                    const MarkerLayer(
                       markers: [
                         Marker(
-                          point: const LatLng(31.6538, -106.3705),
+                          point: LatLng(31.766367, -106.561674),
                           width: 50,
                           height: 50,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: const Icon(
-                              Icons.directions_bus,
-                              color: Colors.blue,
-                              size: 35,
-                            ),
+                          child: Icon(
+                            Icons.directions_bus,
+                            color: Colors.blue,
+                            size: 35,
                           ),
                         ),
                       ],
@@ -88,6 +83,7 @@ class Homepage extends StatelessWidget {
               ),
             ),
 
+            // PERFIL
             Positioned(
               top: 44,
               right: 5,
@@ -103,6 +99,7 @@ class Homepage extends StatelessWidget {
               ),
             ),
 
+            // BOTÓN SOS CON BORDE
             Positioned(
               bottom: 178,
               right: 6,
@@ -135,11 +132,12 @@ class Homepage extends StatelessWidget {
               ),
             ),
 
+            // PANEL INFERIOR
             Positioned(
               bottom: 60,
               left: 6,
+              right: 6,
               child: Container(
-                width: MediaQuery.of(context).size.width - 12,
                 height: 120,
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 15, 4, 50),
@@ -179,7 +177,7 @@ class Homepage extends StatelessWidget {
 
             Positioned(
               bottom: 0,
-              left: MediaQuery.of(context).size.width / 2 - 20,
+              left: size.width / 2 - 20,
               child: IconButton(
                 icon: const Icon(
                   Icons.directions_bus,

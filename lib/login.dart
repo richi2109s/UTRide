@@ -9,15 +9,12 @@ class MyLogin extends StatefulWidget {
 }
 
 class _MyLoginState extends State<MyLogin> {
-  // Controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   bool isLoading = false;
 
-  // Funcion Login
   Future<void> loginUser() async {
-    // Validaciones
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Completa todos los campos')),
@@ -30,24 +27,41 @@ class _MyLoginState extends State<MyLogin> {
         isLoading = true;
       });
 
-      // Login Firebase
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
 
-      // Verifica si el widget sigue montado
+      User? user = userCredential.user;
+
       if (!mounted) return;
 
+      if (user != null && !user.emailVerified) {
+        await FirebaseAuth.instance.signOut();
+
+        if (!mounted) return;
+
+        setState(() {
+          isLoading = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Debes verificar tu correo antes de iniciar sesión'),
+          ),
+        );
+
+        return;
+      }
       setState(() {
-        isLoading = true;
+        isLoading = false;
       });
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Inicio de sesión exitoso')));
 
-      // Navegar al home/profile
       Navigator.pushReplacementNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
@@ -118,7 +132,6 @@ class _MyLoginState extends State<MyLogin> {
 
                 child: Column(
                   children: [
-                    // EMAIL
                     TextField(
                       controller: emailController,
                       style: const TextStyle(color: Colors.white),
@@ -154,7 +167,6 @@ class _MyLoginState extends State<MyLogin> {
 
                     const SizedBox(height: 30),
 
-                    // PASSWORD
                     TextField(
                       controller: passwordController,
                       obscureText: true,
@@ -194,7 +206,7 @@ class _MyLoginState extends State<MyLogin> {
 
                       children: [
                         const Text(
-                          'Sign In',
+                          'Iniciar Sesion',
 
                           style: TextStyle(
                             fontSize: 27,

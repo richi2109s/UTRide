@@ -35,8 +35,10 @@ class _MyRegisterState extends State<MyRegister> {
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
           );
+      User? user = FirebaseAuth.instance.currentUser;
 
-      // Enviar correo de verificación
+      await user?.sendEmailVerification();
+
       await userCredential.user?.sendEmailVerification();
 
       if (!mounted) return;
