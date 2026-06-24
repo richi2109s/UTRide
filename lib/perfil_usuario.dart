@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Perfil extends StatefulWidget {
   const Perfil({super.key});
@@ -9,6 +10,17 @@ class Perfil extends StatefulWidget {
 }
 
 class _PerfilState extends State<Perfil> {
+  Future<Map<String, dynamic>?> getUserData() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('usuarios')
+        .doc(uid)
+        .get();
+
+    return doc.data();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +41,7 @@ class _PerfilState extends State<Perfil> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  // Encabezado
+                  // HEADER
                   Row(
                     children: [
                       IconButton(
@@ -50,16 +62,11 @@ class _PerfilState extends State<Perfil> {
                           ),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.settings, color: Colors.white),
-                        onPressed: () {},
-                      ),
                     ],
                   ),
 
                   const SizedBox(height: 15),
 
-                  // Tarjeta principal
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -69,54 +76,55 @@ class _PerfilState extends State<Perfil> {
                     ),
                     child: Row(
                       children: [
-                        Stack(
-                          children: [
-                            const CircleAvatar(
-                              radius: 45,
-                              backgroundImage: AssetImage('assets/user.jpg'),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.orange,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ],
+                        const CircleAvatar(
+                          radius: 45,
+                          backgroundImage: AssetImage('assets/user.png'),
                         ),
 
                         const SizedBox(width: 15),
 
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Carlos Hernández",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "carlos.hernandez@utpn.edu.mx",
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              SizedBox(height: 10),
-                            ],
+                          child: FutureBuilder<Map<String, dynamic>?>(
+                            future: getUserData(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Text(
+                                  "Cargando...",
+                                  style: TextStyle(color: Colors.white),
+                                );
+                              }
+
+                              if (!snapshot.hasData || snapshot.data == null) {
+                                return const Text(
+                                  "Sin datos",
+                                  style: TextStyle(color: Colors.white),
+                                );
+                              }
+
+                              final user = snapshot.data!;
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    user['nombre'] ?? '',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    user['correo'] ?? '',
+                                    style: const TextStyle(
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -126,38 +134,18 @@ class _PerfilState extends State<Perfil> {
                   const SizedBox(height: 20),
 
                   buildSection("Información personal", [
-                    buildItem(
-                      Icons.email_outlined,
-                      "Correo",
-                      "carlos.hernandez@utpn.edu.mx",
-                    ),
-                    buildItem(
-                      Icons.phone_outlined,
-                      "Teléfono",
-                      "(871) 123 4567",
-                    ),
-                    buildItem(
-                      Icons.location_on_outlined,
-                      "Dirección",
-                      "Av. Universidad #123",
-                    ),
+                    buildItem(Icons.email_outlined, "Correo", ""),
+                    buildItem(Icons.phone_outlined, "Teléfono", ""),
+                    buildItem(Icons.location_on_outlined, "Dirección", ""),
                   ]),
 
                   const SizedBox(height: 15),
 
                   buildSection("Información de transporte", [
-                    buildItem(
-                      Icons.directions_bus,
-                      "Camión a tomar",
-                      "Ruta 1A - Camión 07",
-                    ),
-                    buildItem(Icons.schedule, "Turno", "Matutino"),
-                    buildItem(
-                      Icons.pin_drop,
-                      "Parada habitual",
-                      "Parada Central",
-                    ),
-                    buildItem(Icons.access_time, "Horario salida", "06:40 AM"),
+                    buildItem(Icons.directions_bus, "Camión a tomar", ""),
+                    buildItem(Icons.schedule, "Turno", ""),
+                    buildItem(Icons.pin_drop, "Parada habitual", ""),
+                    buildItem(Icons.access_time, "Horario salida", ""),
                   ]),
 
                   const SizedBox(height: 15),
@@ -188,6 +176,7 @@ class _PerfilState extends State<Perfil> {
 
                   const SizedBox(height: 20),
 
+                  // LOGOUT
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(

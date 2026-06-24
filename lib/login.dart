@@ -54,13 +54,10 @@ class _MyLoginState extends State<MyLogin> {
 
         return;
       }
+
       setState(() {
         isLoading = false;
       });
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Inicio de sesión exitoso')));
 
       Navigator.pushReplacementNamed(context, '/home');
     } on FirebaseAuthException catch (e) {
@@ -102,7 +99,7 @@ class _MyLoginState extends State<MyLogin> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/login.png'),
+          image: AssetImage('assets/inicio.png'),
           fit: BoxFit.cover,
         ),
       ),
@@ -110,14 +107,29 @@ class _MyLoginState extends State<MyLogin> {
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
+            Positioned(
+              top: 80, // Ajusta este valor a tu gusto
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Image.asset(
+                  'assets/logoblanco.png',
+                  width: 240,
+                  height: 240,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+
             Container(
-              padding: const EdgeInsets.only(left: 100, top: 390),
+              padding: const EdgeInsets.only(left: 35, right: 35, top: 360),
               child: const Text(
-                "Iniciar Sesion",
+                "Iniciar sesión",
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 33,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -129,72 +141,53 @@ class _MyLoginState extends State<MyLogin> {
                   right: 35,
                   left: 35,
                 ),
-
                 child: Column(
                   children: [
                     TextField(
                       controller: emailController,
                       style: const TextStyle(color: Colors.white),
-
                       decoration: InputDecoration(
                         fillColor: Colors.transparent,
                         filled: true,
-
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.white),
                         ),
-
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.black),
                         ),
-
-                        hintText: 'Correo Electronico',
-
-                        hintStyle: const TextStyle(color: Colors.white),
-
+                        hintText: 'Correo electrónico',
+                        hintStyle: const TextStyle(color: Colors.white70),
                         prefixIcon: const Icon(
                           Icons.email,
-                          color: Colors.white,
-                        ),
-
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white70,
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 25),
 
                     TextField(
                       controller: passwordController,
                       obscureText: true,
-
                       style: const TextStyle(color: Colors.white),
-
                       decoration: InputDecoration(
                         fillColor: Colors.transparent,
                         filled: true,
-
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.white),
                         ),
-
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.black),
                         ),
-
                         hintText: 'Contraseña',
-
-                        hintStyle: const TextStyle(color: Colors.white),
-
-                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
-
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        hintStyle: const TextStyle(color: Colors.white70),
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Colors.white70,
                         ),
                       ),
                     ),
@@ -203,32 +196,38 @@ class _MyLoginState extends State<MyLogin> {
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Text(
-                          'Iniciar Sesion',
-
+                          'Iniciar sesión',
                           style: TextStyle(
-                            fontSize: 27,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
 
                         CircleAvatar(
-                          radius: 30,
+                          radius: 28,
                           backgroundColor: const Color(0xFFF7931E),
-
                           child: isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
                                   color: Colors.white,
-
                                   onPressed: loginUser,
-
-                                  icon: const Icon(Icons.arrow_forward),
+                                  icon: const Icon(
+                                    Icons.arrow_forward,
+                                    size: 20,
+                                  ),
                                 ),
                         ),
                       ],
@@ -238,34 +237,30 @@ class _MyLoginState extends State<MyLogin> {
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/register');
                           },
-
                           child: const Text(
-                            'Registrate',
-
+                            'Regístrate',
                             style: TextStyle(
                               decoration: TextDecoration.underline,
-                              fontSize: 18,
-                              color: Colors.white,
+                              fontSize: 16,
+                              color: Colors.white70,
                             ),
                           ),
                         ),
-
                         TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/ocontracena');
                           },
                           child: const Text(
-                            'Olvide mi contraseña',
+                            'Olvidé mi contraseña',
                             style: TextStyle(
                               decoration: TextDecoration.underline,
-                              fontSize: 18,
-                              color: Colors.white,
+                              fontSize: 16,
+                              color: Colors.white70,
                             ),
                           ),
                         ),

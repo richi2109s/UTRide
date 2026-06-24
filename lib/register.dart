@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyRegister extends StatefulWidget {
   const MyRegister({super.key});
@@ -35,11 +36,18 @@ class _MyRegisterState extends State<MyRegister> {
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
           );
-      User? user = FirebaseAuth.instance.currentUser;
+
+      User? user = userCredential.user;
 
       await user?.sendEmailVerification();
 
-      await userCredential.user?.sendEmailVerification();
+      await FirebaseFirestore.instance
+          .collection('usuarios')
+          .doc(user!.uid)
+          .set({
+            'nombre': nameController.text.trim(),
+            'correo': emailController.text.trim(),
+          });
 
       if (!mounted) return;
 
@@ -94,23 +102,42 @@ class _MyRegisterState extends State<MyRegister> {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/register.png'),
+          image: AssetImage('assets/inicio.png'),
           fit: BoxFit.cover,
         ),
       ),
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
+
         appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+
         body: Stack(
           children: [
-            Container(
-              padding: const EdgeInsets.only(left: 100, top: 200),
+            Positioned(
+              top: 0, // Ajusta este valor a tu gusto
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Image.asset(
+                  'assets/logoblanco.png',
+                  width: 220,
+                  height: 220,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            Positioned(
+              top: 235,
+              left: 35,
+              right: 35,
               child: const Text(
-                'Crear Usuario',
+                'Crear usuario',
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 33,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -118,160 +145,122 @@ class _MyRegisterState extends State<MyRegister> {
             SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.28,
+                  top: MediaQuery.of(context).size.height * 0.35,
+                  left: 35,
+                  right: 35,
                 ),
+
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 35, right: 35),
-                      child: Column(
-                        children: [
-                          // Nombre
-                          TextField(
-                            controller: nameController,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              fillColor: Colors.transparent,
-                              filled: true,
-
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                ),
-                              ),
-
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ),
-
-                              hintText: "Nombre",
-                              hintStyle: const TextStyle(color: Colors.white),
-
-                              prefixIcon: const Icon(
-                                Icons.person,
-                                color: Colors.white,
-                              ),
-
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 30),
-
-                          // Email
-                          TextField(
-                            controller: emailController,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              fillColor: Colors.transparent,
-                              filled: true,
-
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                ),
-                              ),
-
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ),
-
-                              hintText: "Correo Electronico",
-                              hintStyle: const TextStyle(color: Colors.white),
-
-                              prefixIcon: const Icon(
-                                Icons.email,
-                                color: Colors.white,
-                              ),
-
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 30),
-
-                          // Password
-                          TextField(
-                            controller: passwordController,
-                            obscureText: true,
-                            style: const TextStyle(color: Colors.white),
-                            decoration: InputDecoration(
-                              fillColor: Colors.transparent,
-                              filled: true,
-
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: Colors.white,
-                                ),
-                              ),
-
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                  color: Colors.black,
-                                ),
-                              ),
-
-                              hintText: "Contraseña",
-                              hintStyle: const TextStyle(color: Colors.white),
-
-                              prefixIcon: const Icon(
-                                Icons.lock,
-                                color: Colors.white,
-                              ),
-
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 45),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Registrarme',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 27,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xFFF7931E),
-
-                                child: isLoading
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )
-                                    : IconButton(
-                                        color: Colors.white,
-                                        onPressed: registerUser,
-                                        icon: const Icon(Icons.arrow_forward),
-                                      ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    // 👤 Nombre
+                    TextField(
+                      controller: nameController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.transparent, // 👈 IGUAL AL LOGIN
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.black),
+                        ),
+                        hintText: "Nombre",
+                        hintStyle: const TextStyle(color: Colors.white),
+                        prefixIcon: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
                       ),
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    TextField(
+                      controller: emailController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.transparent,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.black),
+                        ),
+                        hintText: "Correo electrónico",
+                        hintStyle: const TextStyle(color: Colors.white),
+                        prefixIcon: const Icon(
+                          Icons.email,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 25),
+
+                    TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.transparent,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.black),
+                        ),
+                        hintText: "Contraseña",
+                        hintStyle: const TextStyle(color: Colors.white),
+                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Registrarme',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        CircleAvatar(
+                          radius: 26,
+                          backgroundColor: const Color(0xFFF7931E),
+
+                          child: isLoading
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : IconButton(
+                                  color: Colors.white,
+                                  onPressed: registerUser,
+                                  icon: const Icon(
+                                    Icons.arrow_forward,
+                                    size: 20,
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
