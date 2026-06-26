@@ -99,6 +99,8 @@ class _MyRegisterState extends State<MyRegister> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -106,34 +108,33 @@ class _MyRegisterState extends State<MyRegister> {
           fit: BoxFit.cover,
         ),
       ),
-
       child: Scaffold(
         backgroundColor: Colors.transparent,
-
         appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
-
         body: Stack(
           children: [
+            // Logo responsivo
             Positioned(
-              top: 0, // Ajusta este valor a tu gusto
+              top: size.height * 0.00,
               left: 0,
               right: 0,
               child: Center(
                 child: Image.asset(
                   'assets/logoblanco.png',
-                  width: 220,
-                  height: 220,
+                  width: size.width * 0.60,
+                  height: size.width * 0.60,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
+
+            // Título responsivo
             Positioned(
-              top: 235,
+              top: size.height * 0.28,
               left: 35,
               right: 35,
               child: const Text(
                 'Crear usuario',
-                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 28,
@@ -142,23 +143,22 @@ class _MyRegisterState extends State<MyRegister> {
               ),
             ),
 
+            // Formulario
             SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.35,
+                  top: size.height * 0.35,
                   left: 35,
                   right: 35,
                 ),
-
                 child: Column(
                   children: [
-                    // 👤 Nombre
                     TextField(
                       controller: nameController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.transparent, // 👈 IGUAL AL LOGIN
+                        fillColor: Colors.transparent,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: const BorderSide(color: Colors.white),
@@ -237,11 +237,9 @@ class _MyRegisterState extends State<MyRegister> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-
                         CircleAvatar(
                           radius: 26,
                           backgroundColor: const Color(0xFFF7931E),
-
                           child: isLoading
                               ? const SizedBox(
                                   width: 18,

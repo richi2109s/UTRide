@@ -12,6 +12,9 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   bool mostrarPanel = true;
 
+  final MapController _mapController = MapController();
+  double currentZoom = 15;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -26,34 +29,37 @@ class _HomepageState extends State<Homepage> {
         ),
         child: Stack(
           children: [
-            // TÍTULO
-            const Positioned(
-              left: 150,
-              top: 50,
-              child: Text(
-                "UT",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 33,
-                  fontWeight: FontWeight.bold,
+            // Logo UTRide responsivo
+            Positioned(
+              top: MediaQuery.of(context).padding.top + 5,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "UT",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "Ride",
+                        style: TextStyle(
+                          color: Colors.orange,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
 
-            const Positioned(
-              left: 194,
-              top: 50,
-              child: Text(
-                "Ride",
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: 33,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-
-            // MAPA + BOTÓN SOS
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               top: 110,
@@ -65,6 +71,7 @@ class _HomepageState extends State<Homepage> {
                 child: Stack(
                   children: [
                     FlutterMap(
+                      mapController: _mapController,
                       options: const MapOptions(
                         initialCenter: LatLng(31.766367, -106.561674),
                         initialZoom: 15,
@@ -72,7 +79,7 @@ class _HomepageState extends State<Homepage> {
                       children: [
                         TileLayer(
                           urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                           userAgentPackageName: 'com.utride.app',
                         ),
                         const MarkerLayer(
@@ -92,7 +99,45 @@ class _HomepageState extends State<Homepage> {
                       ],
                     ),
 
-                    // BOTÓN SOS
+                    Positioned(
+                      top: 20,
+                      right: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black26, blurRadius: 5),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              onPressed: () {
+                                currentZoom++;
+                                _mapController.move(
+                                  _mapController.camera.center,
+                                  currentZoom,
+                                );
+                              },
+                            ),
+                            const Divider(height: 1),
+                            IconButton(
+                              icon: const Icon(Icons.remove),
+                              onPressed: () {
+                                currentZoom--;
+                                _mapController.move(
+                                  _mapController.camera.center,
+                                  currentZoom,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     Positioned(
                       right: 10,
                       bottom: 10,
@@ -107,7 +152,7 @@ class _HomepageState extends State<Homepage> {
                             color: Colors.white,
                             border: Border.all(
                               color: const Color.fromARGB(255, 75, 47, 255),
-                              width: 3,
+                              width: 2,
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -126,7 +171,6 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
 
-            // Boton para di
             Positioned(
               top: 44,
               right: 5,
@@ -142,7 +186,6 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
 
-            // Panel inferior
             AnimatedPositioned(
               duration: const Duration(milliseconds: 300),
               bottom: mostrarPanel ? 60 : -140,
@@ -152,7 +195,7 @@ class _HomepageState extends State<Homepage> {
                 height: 120,
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 15, 4, 50),
-                  border: Border.all(color: Colors.blue, width: 3),
+                  border: Border.all(color: Colors.blue, width: 2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Center(
@@ -172,7 +215,6 @@ class _HomepageState extends State<Homepage> {
                 child: Divider(color: Colors.white),
               ),
 
-            // Barra inferior
             Positioned(
               bottom: 0,
               left: 0,
@@ -183,19 +225,15 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
 
-            // Probablemente se elimine
             Positioned(
               bottom: 0,
               left: 20,
               child: IconButton(
                 icon: const Icon(Icons.home, size: 40, color: Colors.white),
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, "/home");
-                },
+                onPressed: () {},
               ),
             ),
 
-            // Boton para las distintas rutas
             Positioned(
               bottom: 0,
               left: size.width / 2 - 20,
@@ -215,7 +253,6 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
 
-            // Historial de notificaciones
             Positioned(
               bottom: 0,
               right: 20,

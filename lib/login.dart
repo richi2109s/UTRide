@@ -96,6 +96,8 @@ class _MyLoginState extends State<MyLogin> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -108,24 +110,25 @@ class _MyLoginState extends State<MyLogin> {
         body: Stack(
           children: [
             Positioned(
-              top: 80, // Ajusta este valor a tu gusto
+              top: size.height * 0.12,
               left: 0,
               right: 0,
               child: Center(
                 child: Image.asset(
                   'assets/logoblanco.png',
-                  width: 240,
-                  height: 240,
+                  width: size.width * 0.60,
+                  height: size.width * 0.60,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
 
-            Container(
-              padding: const EdgeInsets.only(left: 35, right: 35, top: 360),
+            Positioned(
+              top: size.height * 0.42,
+              left: 35,
+              right: 35,
               child: const Text(
                 "Iniciar sesión",
-                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 28,
@@ -137,9 +140,9 @@ class _MyLoginState extends State<MyLogin> {
             SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.5,
-                  right: 35,
+                  top: size.height * 0.50,
                   left: 35,
+                  right: 35,
                 ),
                 child: Column(
                   children: [
@@ -206,7 +209,6 @@ class _MyLoginState extends State<MyLogin> {
                             color: Colors.white,
                           ),
                         ),
-
                         CircleAvatar(
                           radius: 28,
                           backgroundColor: const Color(0xFFF7931E),
