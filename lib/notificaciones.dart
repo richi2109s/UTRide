@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Alerta {
   String titulo;
@@ -22,6 +24,9 @@ class Notificaciones extends StatefulWidget {
 }
 
 class _NotificacionesState extends State<Notificaciones> {
+  final firestore = FirebaseFirestore.instance;
+  final auth = FirebaseAuth.instance;
+
   bool notificacionesActivas = true;
   List<Alerta> alertas = [
     Alerta(
@@ -55,6 +60,50 @@ class _NotificacionesState extends State<Notificaciones> {
       activa: true,
     ),
   ];
+  @override
+  void initState() {
+    super.initState();
+    cargarConfiguracion();
+  }
+
+  Future<void> guardarConfiguracion() async {
+    final uid = auth.currentUser!.uid;
+
+    Map<String, bool> alertasMap = {};
+
+    for (var alerta in alertas) {
+      alertasMap[alerta.titulo] = alerta.activa;
+    }
+
+    await firestore.collection('usuarios').doc(uid).set({
+      'notificacionesActivas': notificacionesActivas,
+      'alertas': alertasMap,
+    }, SetOptions(merge: true));
+  }
+
+  Future<void> cargarConfiguracion() async {
+    final uid = auth.currentUser!.uid;
+
+    final doc = await firestore.collection('usuarios').doc(uid).get();
+
+    if (!doc.exists) return;
+
+    final data = doc.data();
+
+    if (data == null) return;
+
+    setState(() {
+      notificacionesActivas = data['notificacionesActivas'] ?? true;
+
+      final alertasGuardadas = Map<String, dynamic>.from(data['alertas'] ?? {});
+
+      for (var alerta in alertas) {
+        if (alertasGuardadas.containsKey(alerta.titulo)) {
+          alerta.activa = alertasGuardadas[alerta.titulo];
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +219,7 @@ class _NotificacionesState extends State<Notificaciones> {
                             setState(() {
                               notificacionesActivas = value;
                             });
+                            guardarConfiguracion();
                           },
                           activeThumbColor: Colors.white,
                           activeTrackColor: const Color.fromARGB(
@@ -258,6 +308,8 @@ class _NotificacionesState extends State<Notificaciones> {
                               setState(() {
                                 alertas[index].activa = value;
                               });
+
+                              guardarConfiguracion();
                             },
                             activeThumbColor: Colors.white,
                             activeTrackColor: const Color.fromARGB(

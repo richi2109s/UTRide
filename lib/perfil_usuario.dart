@@ -26,7 +26,6 @@ class _PerfilState extends State<Perfil> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(

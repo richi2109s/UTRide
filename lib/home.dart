@@ -29,9 +29,8 @@ class _HomepageState extends State<Homepage> {
         ),
         child: Stack(
           children: [
-            // Logo UTRide responsivo
             Positioned(
-              top: MediaQuery.of(context).padding.top + 5,
+              top: MediaQuery.of(context).padding.top + 8,
               left: 0,
               right: 0,
               child: Center(
@@ -172,12 +171,12 @@ class _HomepageState extends State<Homepage> {
             ),
 
             Positioned(
-              top: 44,
+              top: 40,
               right: 5,
               child: IconButton(
                 icon: const Icon(
                   Icons.account_circle,
-                  size: 40,
+                  size: 50,
                   color: Colors.white,
                 ),
                 onPressed: () {
