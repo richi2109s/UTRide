@@ -15,6 +15,18 @@ class _HomepageState extends State<Homepage> {
   final MapController _mapController = MapController();
   double currentZoom = 15;
 
+  final List<LatLng> rutaTemporal = [
+    const LatLng(31.767032201355043, -106.55992998604779),
+    const LatLng(31.766746551377185, -106.5577432859108),
+    const LatLng(31.76771529008741, -106.55707622691023),
+    const LatLng(31.76999841644748, -106.55518705611114),
+    const LatLng(31.772754487653973, -106.55316055470897),
+    const LatLng(31.770816244922944, -106.54688150336919),
+    const LatLng(31.77041208017706, -106.54535859308818),
+    const LatLng(31.76972678744124, -106.54111692449723),
+    const LatLng(31.769428873569126, -106.54045446637942),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -81,22 +93,104 @@ class _HomepageState extends State<Homepage> {
                               'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
                           userAgentPackageName: 'com.utride.app',
                         ),
+
+                        PolylineLayer(
+                          polylines: [
+                            Polyline(
+                              points: rutaTemporal,
+                              strokeWidth: 5,
+                              color: Colors.orange,
+                            ),
+                          ],
+                        ),
+
                         const MarkerLayer(
                           markers: [
                             Marker(
-                              point: LatLng(31.766367, -106.561674),
+                              point: LatLng(
+                                31.767032201355043,
+                                -106.55992998604779,
+                              ),
+                              width: 50,
+                              height: 50,
+                              child: Icon(
+                                Icons.location_on,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                            ),
+                            Marker(
+                              point: LatLng(
+                                31.769428873569126,
+                                -106.54045446637942,
+                              ),
                               width: 50,
                               height: 50,
                               child: Icon(
                                 Icons.directions_bus,
                                 color: Colors.blue,
-                                size: 35,
+                                size: 30,
                               ),
                             ),
                           ],
                         ),
                       ],
                     ),
+                    if (mostrarPanel)
+                      Positioned(
+                        bottom: 55,
+                        left: 10,
+                        right: 10,
+                        child: Container(
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(180, 15, 4, 50),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text(
+                                "Ruta Universitaria 1",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "Camión: UTR-05",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "Salida: Universidad Tecnológica",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "Destino: Puerto de Anapra",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "Hora de salida: 7:30 AM",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "Hora estimada de llegada: 7:55 AM",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Text(
+                                "Llega a tu ubicación en 4 min",
+                                style: TextStyle(
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
 
                     Positioned(
                       top: 20,
