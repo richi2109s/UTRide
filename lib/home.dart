@@ -136,61 +136,6 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ],
                     ),
-                    if (mostrarPanel)
-                      Positioned(
-                        bottom: 55,
-                        left: 10,
-                        right: 10,
-                        child: Container(
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(180, 15, 4, 50),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Text(
-                                "Ruta Universitaria 1",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "Camión: UTR-05",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Salida: Universidad Tecnológica",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Destino: Puerto de Anapra",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Hora de salida: 7:30 AM",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Hora estimada de llegada: 7:55 AM",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Text(
-                                "Llega a tu ubicación en 4 min",
-                                style: TextStyle(
-                                  color: Colors.orange,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
 
                     Positioned(
                       top: 20,
